@@ -96,7 +96,7 @@ city = st.text_input("Enter destination city", placeholder="e.g., Paris")
 
 if city:
     with st.spinner("Fetching attractions..."):
-        lat, lon = get_city_coordinates(city)
+        lat, lon = get_city_coordinates(city, api_key)
         if lat and lon:
             attractions = get_top_attractions(lat, lon, limit=20)
 
@@ -146,4 +146,5 @@ if city:
         else:
 
             st.error("City not found. Try another.")
+
 
