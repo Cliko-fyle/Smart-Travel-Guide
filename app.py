@@ -5,6 +5,7 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
 from transformers import MarianMTModel, MarianTokenizer, AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+import sentencepiece, accelerate
 
 api_key = "5ae2e3f221c38a28845f05b6265ce86653524a48e15d5432e037707b"
 #helper functions
@@ -146,6 +147,7 @@ if city:
         else:
 
             st.error("City not found. Try another.")
+
 
 
 
