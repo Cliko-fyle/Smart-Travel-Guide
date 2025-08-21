@@ -98,7 +98,7 @@ if city:
     with st.spinner("Fetching attractions..."):
         lat, lon = get_city_coordinates(city, api_key)
         if lat and lon:
-            attractions = get_top_attractions(lat, lon, limit=20)
+            attractions = get_top_attractions(lat, lon, api_key, radius=20000, limit=20)
 
             # load models
             trans_tokenizer, trans_model = load_translation_model()
@@ -108,7 +108,7 @@ if city:
             for a in attractions:
                 xid = a.get("xid")
                 if xid:
-                    details = get_attraction_details(xid)
+                    details = get_attraction_details(xid, api_key)
                     name = details.get("name", "Unknown")
                     desc = details.get("wikipedia_extracts", {}).get("text", "")
                     translated_desc = translate_to_english(desc, trans_tokenizer, trans_model)
@@ -146,5 +146,6 @@ if city:
         else:
 
             st.error("City not found. Try another.")
+
 
 
