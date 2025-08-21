@@ -87,7 +87,7 @@ def load_rag_model():
     return rag_pipeline
 
 
-API_KEY = "5ae2e3f221c38a28845f05b6265ce86653524a48e15d5432e037707b"
+api_key = "5ae2e3f221c38a28845f05b6265ce86653524a48e15d5432e037707b"
 
 #streamlit app
 
@@ -145,4 +145,5 @@ if city:
                     st.subheader("🔎 Suggested Places")
                     st.write(answer[0]['generated_text'])
         else:
+
             st.error("City not found. Try another.")
