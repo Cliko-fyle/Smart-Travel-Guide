@@ -6,7 +6,7 @@ import faiss
 from sentence_transformers import SentenceTransformer
 from transformers import MarianMTModel, MarianTokenizer, AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
-api_key = "5ae2e3f221c38a28845f05b6265ce86653524a48e15d5432e037707b"
+api_key = st.secrets["API_KEY"]
 #helper functions
 
 def get_city_coordinates(city_name, api_key):
@@ -146,6 +146,7 @@ if city:
         else:
 
             st.error("City not found. Try another.")
+
 
 
 
