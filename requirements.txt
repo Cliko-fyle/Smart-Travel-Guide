@@ -3,6 +3,7 @@ requests
 numpy
 faiss-cpu
 sentence-transformers
-sentencpiece
+sentencepiece
 accelerate
 transformers
+
