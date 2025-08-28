@@ -6,4 +6,3 @@ sentence-transformers
 sentencepiece
 accelerate
 transformers
-
