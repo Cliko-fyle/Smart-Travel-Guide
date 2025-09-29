@@ -154,10 +154,11 @@ if city:
                         answer = call_llm(prompt)
 
                     st.subheader("🔎 Suggested Places")
-                    st.write(answer[0]['generated_text'])
+                    st.write(answer)
         else:
 
             st.error("City not found. Try another.")
+
 
 
 
