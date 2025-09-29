@@ -3,6 +3,7 @@ import os
 import requests
 import numpy as np
 import faiss
+from groq import Groq
 from sentence_transformers import SentenceTransformer
 from transformers import MarianMTModel, MarianTokenizer, AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
@@ -72,6 +73,17 @@ def retrieve_similar_places(query, embed_model, index, metadata, texts, top_k=5)
         })
     return results
 
+def call_llm(prompt):
+    client = Groq(
+        api_key = st.secrets["groq_api_key"]
+    )
+    response = client.chat.completions.create(
+        model="qwen/qwen3-32b",
+        messages=[{"role": "user","content": prompt}],
+        max_tokens = 300,
+        )
+    return response.choices[0].message.content
+
 #load the models
 
 @st.cache_resource
@@ -80,12 +92,12 @@ def load_translation_model():
     model = MarianMTModel.from_pretrained("Helsinki-NLP/opus-mt-mul-en")
     return tokenizer, model
 
-@st.cache_resource
-def load_rag_model():
-    tokenizer = AutoTokenizer.from_pretrained("google/long-t5-tglobal-base")
-    model = AutoModelForSeq2SeqLM.from_pretrained("google/long-t5-tglobal-base")
-    rag_pipeline = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
-    return rag_pipeline
+# @st.cache_resource
+# def load_rag_model():
+#     tokenizer = AutoTokenizer.from_pretrained("google/long-t5-tglobal-base")
+#     model = AutoModelForSeq2SeqLM.from_pretrained("google/long-t5-tglobal-base")
+#     rag_pipeline = pipeline("text2text-generation", model=model, tokenizer=tokenizer)
+#     return rag_pipeline
 
 
 #streamlit app
@@ -102,7 +114,7 @@ if city:
 
             # load models
             trans_tokenizer, trans_model = load_translation_model()
-            rag_pipeline = load_rag_model()
+            # rag_pipeline = load_rag_model()
 
             detailed_attractions = []
             for a in attractions:
@@ -135,17 +147,18 @@ if city:
                     Context:
                     {context}
 
-                    Instruction: Summarize all relevant places in a concise list with one sentence per place.
+                    Instruction: Summarize all relevant places in a concise list with a brief description of each place.
                     """
 
                     with st.spinner("Generating answer..."):
-                        answer = rag_pipeline(prompt, max_new_tokens=512)
+                        answer = call_llm(prompt)
 
                     st.subheader("🔎 Suggested Places")
                     st.write(answer[0]['generated_text'])
         else:
 
             st.error("City not found. Try another.")
+
 
 
 
